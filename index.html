@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An immersive text adventure through a mysterious ancient library">
+    <title>The Lost Codex - Interactive Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #2d1b1b 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid rgba(255, 107, 53, 0.6);
+            box-shadow: 0 4px 30px rgba(255, 87, 34, 0.3);
+        }
+        
+        h1 {
+            font-size: 3em;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.8), 0 0 40px rgba(255, 87, 34, 0.4);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            color: #ff9d6e;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            color: #ffab7a;
+            text-shadow: 0 2px 10px rgba(255, 107, 53, 0.5);
+        }
+        
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+            background: rgba(30, 20, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        section:target {
+            display: block;
+        }
+        
+        #start {
+            display: block;
+        }
+        
+        h2 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #ff9d6e;
+            text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+            border-bottom: 2px solid rgba(255, 107, 53, 0.5);
+            padding-bottom: 15px;
+        }
+        
+        p {
+            font-size: 1.15em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            color: #cfcfcf;
+        }
+        
+        nav {
+            margin-top: 30px;
+        }
+        
+        nav a {
+            display: block;
+            padding: 18px 25px;
+            margin: 15px 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(230, 74, 25, 0.3));
+            color: #e0e0e0;
+            text-decoration: none;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 107, 53, 0.4);
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        nav a:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.4), rgba(230, 74, 25, 0.5));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
+            border-color: #ff9d6e;
+            color: #fff;
+        }
+        
+        nav a:active {
+            transform: translateY(-1px);
+        }
+        
+        .ending {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.3), rgba(230, 74, 25, 0.3));
+            border: 3px solid #ff9d6e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+        }
+        
+        .ending p:first-child {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff9d6e;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid rgba(255, 107, 53, 0.3);
+        }
+        
+        footer a {
+            color: #ff9d6e;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        footer a:hover {
+            text-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
+        }
+        
+        .story-intro {
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-left: 4px solid #ff9d6e;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.6em;
+            }
+            
+            section {
+                padding: 25px;
+            }
+            
+            nav a {
+                padding: 15px 20px;
+                font-size: 1em;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            section {
+                display: block !important;
+                page-break-inside: avoid;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⚡ THE LOST CODEX ⚡</h1>
+        <p>An Epic Interactive Adventure</p>
+    </header>
+
+    <main>
+        <section id="start">
+            <h2>🌟 Your Quest Begins</h2>
+            <div class="story-intro">
+                <p>Legend speaks of the Ancient Library—a place where reality bends and knowledge itself takes form. Within its walls lies the Codex of Eternal Wisdom, an artifact that reveals the answer to any question ever asked.</p>
+            </div>
+            <p>You stand before massive oak doors carved with mysterious symbols. Thunder rumbles overhead. The brass handles shaped like owls seem to watch your every move.</p>
+            <p><strong>This is your moment. Your destiny awaits inside.</strong></p>
+            <nav aria-label="Starting choices">
+                <a href="#enter">⚔️ Push Through the Doors</a>
+                <a href="#investigate">🔍 Investigate the Exterior</a>
+            </nav>
+        </section>
+
+        <section id="enter">
+            <h2>🏛️ The Grand Hall</h2>
+            <p>The doors swing open with an echoing boom. Before you stretches a cathedral of knowledge—shelves soaring into shadow, ancient tomes glowing faintly with inner light.</p>
+            <p>Three corridors branch outward, each pulsing with different energy. A bronze plaque warns: <em>"Choose wisely, seeker. Each path tests a different virtue."</em></p>
+            <nav aria-label="Grand hall choices">
+                <a href="#courage">💪 Left Path - The Bold</a>
+                <a href="#wisdom">🧠 Center Path - The Curious</a>
+                <a href="#caution">🛡️ Right Path - The Cautious</a>
+            </nav>
+        </section>
+
+        <section id="investigate">
+            <h2>🔎 Secrets Revealed</h2>
+            <p>You circle the building, finding ivy-covered walls and sealed windows. Then—a glint of metal catches your eye. A hidden door, half-concealed behind ancient vines!</p>
+            <p>Through a cracked window, you spot something on a reading table. Is that... a map?</p>
+            <nav aria-label="Investigation choices">
+                <a href="#secret">🚪 Try the Hidden Door</a>
+                <a href="#enter">🏛️ Use the Main Entrance</a>
+            </nav>
+        </section>
+
+        <section id="secret">
+            <h2>📜 The Scholar's Study</h2>
+            <p>The hidden door creaks open. Inside: a pristine study untouched by time. Candles flicker despite no breeze. An open journal lies on the desk, ink still wet.</p>
+            <p class="story-intro">The last entry reads: "The Codex hides where stars meet stone. Third floor. Astronomy section. Only those who find the hidden path will understand its true nature."</p>
+            <nav aria-label="Study choices">
+                <a href="#astronomy">⭐ Follow the Clue to Astronomy</a>
+                <a href="#enter">🏛️ Explore the Main Hall First</a>
+            </nav>
+        </section>
+
+        <section id="courage">
+            <h2>⚔️ Hall of Champions</h2>
+            <p>Ancient armor lines the walls. Each suit bears scars from countless battles. As you walk, whispers echo: <em>"Prove your worth..."</em></p>
+            <p>An iron gate blocks the way forward. Carved into stone above it:</p>
+            <p class="story-intro">"I speak without mouth, hear without ears. No body have I, yet come alive with wind. What am I?"</p>
+            <nav aria-label="Riddle choices">
+                <a href="#victory">💡 Answer: An Echo</a>
+                <a href="#defeat">❌ Answer: A Spirit</a>
+                <a href="#enter">↩️ Return to Hall</a>
+            </nav>
+        </section>
+
+        <section id="wisdom">
+            <h2>🌀 The Spiral Tower</h2>
+            <p>A magnificent staircase spirals both up and down, carved with constellations and ancient formulas. Light beckons from above. Strange sounds echo from below.</p>
+            <p>You feel magic in the air—this is no ordinary staircase. It's a test.</p>
+            <nav aria-label="Tower choices">
+                <a href="#astronomy">⬆️ Ascend Toward the Light</a>
+                <a href="#depths">⬇️ Descend Into Mystery</a>
+                <a href="#enter">↩️ Return to Hall</a>
+            </nav>
+        </section>
+
+        <section id="caution">
+            <h2>📚 The Reading Room</h2>
+            <p>Warm light fills this peaceful chamber. Comfortable chairs, recent books, portraits of wise scholars. A note on the table reads:</p>
+            <p class="story-intro">"Comfort is the enemy of discovery. True wisdom lies deeper."</p>
+            <nav aria-label="Reading room choices">
+                <a href="#study">📖 Study Here First</a>
+                <a href="#venture">🚶 Venture Deeper</a>
+                <a href="#enter">↩️ Return to Hall</a>
+            </nav>
+        </section>
+
+        <section id="victory">
+            <h2>🏆 The Chamber of Truth</h2>
+            <p>The gate swings open! Beyond lies a circular room bathed in golden light. In the center, on a crystal pedestal, rests the Codex—midnight blue leather, silver clasps, glowing with power.</p>
+            <p>A voice like distant thunder speaks: <em>"You have proven yourself worthy. Take what you have earned, but remember—true wisdom serves others."</em></p>
+            <div class="ending">
+                <p>🎉 Victory Ending: The Worthy Champion</p>
+                <p>You claimed the Codex through courage and intelligence! Its pages reveal knowledge beyond imagination. You become a legendary scholar, using the Codex's wisdom to help humanity solve its greatest challenges. Songs will be sung of your name for centuries!</p>
+            </div>
+            <nav aria-label="Ending options">
+                <a href="#start">🔄 Play Again</a>
+            </nav>
+        </section>
+
+        <section id="defeat">
+            <h2>❌ Not Yet Ready</h2>
+            <p>The gate remains sealed. The whispers grow sad: <em>"Return when wisdom matches your courage..."</em></p>
+            <p>You're gently pushed back to the hall. Strength alone isn't enough.</p>
+            <nav aria-label="Try again choices">
+                <a href="#wisdom">🧠 Try the Wisdom Path</a>
+                <a href="#caution">🛡️ Try the Cautious Path</a>
+                <a href="#start">🔄 Start Over</a>
+            </nav>
+        </section>
+
+        <section id="astronomy">
+            <h2>⭐ The Observatory</h2>
+            <p>You emerge into a breathtaking observatory. A massive telescope points toward the cosmos through a glass dome. Starlight bathes everything in silver.</p>
+            <p>There—in a glass case—the Codex! But as you open it, you gasp: the pages are mirrors, reflecting your own face. An inscription appears:</p>
+            <p class="story-intro">"The greatest wisdom was within you all along. The Codex merely helps you see it."</p>
+            <div class="ending">
+                <p>✨ Enlightenment Ending: The True Seeker</p>
+                <p>You discovered the Codex's secret—it's not a book of answers but a mirror of the soul. You leave transformed, carrying infinite understanding within yourself. You become a teacher, showing others how to find their inner wisdom. You need no book, for you ARE wisdom!</p>
+            </div>
+            <nav aria-label="Ending options">
+                <a href="#start">🔄 Play Again</a>
+            </nav>
+        </section>
+
+        <section id="depths">
+            <h2>🕳️ The Ancient Archives</h2>
+            <p>Descending into cool darkness, you find archives from lost civilizations. Thousands of years of knowledge surround you. Ahead: a sealed vault with a warning.</p>
+            <p class="story-intro">"Power without wisdom brings only ruin. Enter at your peril."</p>
+            <nav aria-label="Vault choices">
+                <a href="#forbidden">⚠️ Open the Vault</a>
+                <a href="#astronomy">⬆️ Return to the Light</a>
+            </nav>
+        </section>
+
+        <section id="study">
+            <h2>📖 The Patient Path</h2>
+            <p>You spend hours studying, learning the library's history and the nature of true wisdom. As evening falls, understanding blooms in your mind.</p>
+            <p>The journey itself IS the wisdom. Not finding a book, but becoming wise through dedication and patience.</p>
+            <div class="ending">
+                <p>🎓 Scholar Ending: The Dedicated Student</p>
+                <p>You never found the Codex, but gained something greater—understanding that wisdom comes from the journey, not the destination. You become the library's keeper, guiding future seekers. Your patience and dedication inspire generations!</p>
+            </div>
+            <nav aria-label="Ending options">
+                <a href="#start">🔄 Play Again</a>
+            </nav>
+        </section>
+
+        <section id="venture">
+            <h2>🗝️ Hidden Passages</h2>
+            <p>Beyond the reading room, narrow passages lead to forgotten sections. The air grows ancient. Books covered in dust haven't been touched in centuries.</p>
+            <p>You find "Cosmology & Celestial Wisdom." A ladder leads upward to a gallery.</p>
+            <nav aria-label="Passage choices">
+                <a href="#astronomy">🪜 Climb Up</a>
+                <a href="#ancient">📚 Examine Ancient Texts</a>
+            </nav>
+        </section>
+
+        <section id="ancient">
+            <h2>📖 Forgotten Wisdom</h2>
+            <p>You carefully study ancient texts. One falls open to your language: "The Codex is a mirror of the soul, revealing what lies within."</p>
+            <p>Suddenly everything makes sense. The Codex doesn't contain answers—it helps you find YOUR answers!</p>
+            <div class="ending">
+                <p>🔮 Discovery Ending: The Self-Knower</p>
+                <p>Through patient research, you learned the Codex's true nature. You don't need to possess it—understanding its purpose IS the wisdom. You leave forever changed, your own source of knowledge. Your discovery reshapes how humanity seeks truth!</p>
+            </div>
+            <nav aria-label="Ending options">
+                <a href="#start">🔄 Play Again</a>
+            </nav>
+        </section>
+
+        <section id="forbidden">
+            <h2>⚠️ The Price of Ambition</h2>
+            <p>You break the seal. The vault groans open. Inside: the Codex, chained to a pedestal. As you touch it, overwhelming knowledge floods your mind—TOO MUCH!</p>
+            <p>The library trembles. You've broken an ancient covenant. The power consumes you...</p>
+            <div class="ending">
+                <p>💀 Dark Ending: The Trapped Soul</p>
+                <p>Your ambition exceeded your wisdom. The library's magic binds you here forever as a warning to others. You become part of the archives, a cautionary tale about the danger of seeking power without understanding. Some knowledge demands a terrible price...</p>
+            </div>
+            <nav aria-label="Ending options">
+                <a href="#start">🔄 Try a Wiser Path</a>
+            </nav>
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>⚡ THE LOST CODEX ⚡</strong></p>
+        <p>Pure HTML5 Adventure | 5 Unique Endings to Discover</p>
+        <p><a href="#start">🔄 Restart Your Quest</a></p>
+    </footer>
+</body>
+</html>
